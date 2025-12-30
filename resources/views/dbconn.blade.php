@@ -11,11 +11,11 @@
 </head>
 <body>
     <div>
-        <strong>Showing in-memory student data (no database required)</strong>
+        <!-- <strong>Showing in-memory student data (no database required)</strong> -->
     </div>
 
     @if(isset($students) && $students->isNotEmpty())
-        <h2>Students (In-memory sample)</h2>
+        <h2>Students Data</h2>
         @php $first = (array) $students->first(); @endphp
         <table>
             <thead>
