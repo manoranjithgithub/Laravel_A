@@ -54,6 +54,19 @@ In order to ensure that the Laravel community is welcoming to all, please review
 
 If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
 
+## Deployment (Nimbuz Cloud) 🔧
+
+Do NOT store database credentials in the repository. On Nimbuz Cloud, configure the following environment variables in the platform (values shown as examples):
+
+- `DB_CONNECTION=mysql`
+- `DB_HOST=app1-mysql.env-u1nzr8ypa2`
+- `DB_PORT=3306`
+- `DB_DATABASE=studentdb`
+- `DB_USERNAME=root`
+- `DB_PASSWORD=<set on platform>`
+
+Set these in the Nimbuz UI or via their CLI/infra tooling before deploying.
+
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
