@@ -4,7 +4,8 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\DB;
 
 Route::get('/', function () {
-    return view('welcome');
+    $students = DB::table('std_table')->get();
+    return view('dbconn', ['students' => $students]);
 });
 
 Route::get('/dbconn', function () {
