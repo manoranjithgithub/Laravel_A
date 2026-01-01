@@ -11,7 +11,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        // Ensure our custom exception handler is bound so it can render friendly
+        // responses for missing PDO drivers (prevents ugly fatal traces in prod).
+        $this->app->singleton(\Illuminate\Contracts\Debug\ExceptionHandler::class, \App\Exceptions\Handler::class);
     }
 
     /**
