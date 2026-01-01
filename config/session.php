@@ -2,6 +2,35 @@
 
 use Illuminate\Support\Str;
 
+// Choose a session driver. If the app requests the "database" driver but
+// the corresponding PDO extension (e.g. pdo_mysql) is not loaded, fall
+// back to the "file" driver so session access doesn't cause a fatal error.
+// NOTE: avoid calling framework helpers (e.g. logger()) here because config
+// files are loaded very early during bootstrap and facades may not be set.
+$sessionDriver = env('SESSION_DRIVER', 'database');
+if ($sessionDriver === 'database') {
+    $defaultDb = env('DB_CONNECTION', 'mysql');
+    $needsPdo = in_array($defaultDb, ['mysql', 'mariadb', 'pgsql', 'sqlsrv'], true);
+
+    // Map DB connection -> required PDO extension
+    $pdoMap = [
+        'mysql' => 'pdo_mysql',
+        'mariadb' => 'pdo_mysql',
+        'pgsql' => 'pdo_pgsql',
+        'sqlsrv' => 'pdo_sqlsrv',
+    ];
+
+    $requiredExt = $pdoMap[$defaultDb] ?? null;
+
+    if ($needsPdo && $requiredExt && !extension_loaded($requiredExt)) {
+        // Config files must avoid side-effects (facades may not be available
+        // during config loading), so we do not log here. We silently fallback
+        // to 'file' driver and recommend fixing the environment (install the
+        // required PDO extension) so the app can safely use 'database' sessions.
+        $sessionDriver = 'file';
+    }
+}
+
 return [
 
     /*
@@ -18,7 +47,7 @@ return [
     |
     */
 
-    'driver' => env('SESSION_DRIVER', 'database'),
+    'driver' => $sessionDriver,
 
     /*
     |--------------------------------------------------------------------------
